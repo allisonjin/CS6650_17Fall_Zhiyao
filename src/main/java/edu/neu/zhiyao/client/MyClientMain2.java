@@ -12,14 +12,10 @@ public class MyClientMain2 {
     private static final String EXPECTED_GET_RESP = "alive";
     private static final int EXPECTED_POST_RESP = POST_RES_TEXT.length();
 
-    private int nThreads;
-    private int nIterations;
+    private final int nThreads;
+    private final int nIterations;
     
-    private MyClient client;
-
-    public MyClientMain2(MyClient client) {
-        this(10, 100, client);
-    }
+    private final MyClient client;
 
     public MyClientMain2(int nThreads, int nIterations, MyClient client) {
         this.nThreads = nThreads;
@@ -113,20 +109,23 @@ public class MyClientMain2 {
     }
     
     public static void main(String[] args) {
-        MyClientMain2 instance = null;
-        try {
-            int nThreads = Integer.parseInt(args[0]);
-            int nIters = Integer.parseInt(args[1]);
-            String ip = args[2];
-            int port = Integer.parseInt(args[3]);
-            MyClient client = new MyClient(ip, port);
-            instance = new MyClientMain2(nThreads, nIters, client);
-        } catch (NumberFormatException e) {
-            System.out.println("Invalid input!");
+        int nThreads = 10;
+        int nIters = 100;
+        String ip = "54.193.122.64";
+        int port = 8080;
+        if (args.length > 0) {
+            try {
+                nThreads = Integer.parseInt(args[0]);
+                nIters = Integer.parseInt(args[1]);
+                ip = args[2];
+                port = Integer.parseInt(args[3]);
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input!");
+            }
         }
-        if (instance != null) {
-            instance.runTask();
-        }
+        MyClient client = new MyClient(ip, port);
+        MyClientMain2 instance = new MyClientMain2(nThreads, nIters, client);
+        instance.runTask();
     }
 
 }
